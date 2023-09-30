@@ -11,7 +11,7 @@ const cotizacionSchema=mongoose.Schema({
     },
     creador:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'Usuario'
     },
     productos:[
         {

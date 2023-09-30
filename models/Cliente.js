@@ -39,5 +39,5 @@ const clienteSchema=mongoose.Schema({
     timestamps: true 
 })
 
-const Cliente=mongoose.model('Usuario',clienteSchema)
+const Cliente=mongoose.model('Cliente',clienteSchema)
 export default Cliente;
