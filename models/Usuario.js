@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
 
-const userSchema=mongoose.Schema({
-    nombre:{
+const usuarioSchema=mongoose.Schema({
+    nombres:{
+        type:String,
+        require:true,
+        trim:true
+    },
+    apellidos:{
         type:String,
         require:true,
         trim:true
@@ -30,7 +35,7 @@ const userSchema=mongoose.Schema({
     timestamps: true 
 });
 
-userSchema.pre('save',async function(next){
+usuarioSchema.pre('save',async function(next){
     if(!this.isModified('password')){
         next()
     } 
@@ -39,9 +44,9 @@ userSchema.pre('save',async function(next){
     this.password = await bcrypt.hash(this.password,salt);
 })
 
-userSchema.methods.authenticatePassword= async function(passwordUserForm){
+usuarioSchema.methods.authenticatePassword= async function(passwordUserForm){
     return await bcrypt.compare(passwordUserForm,this.password)
 }
 
-const User=mongoose.model('Usuario',userSchema)
-export default User;
+const Usuario=mongoose.model('Usuario',usuarioSchema)
+export default Usuario;
