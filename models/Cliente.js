@@ -11,6 +11,10 @@ const clienteSchema=mongoose.Schema({
         require:true,
         trim:true
     },
+    razonSocial:{
+        type:String,
+        trim:true
+    },
     nombres:{
         type:String,
         trim:true
@@ -32,8 +36,11 @@ const clienteSchema=mongoose.Schema({
     },
     celular:{
         type:Number,
+    },
+    creador:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Usuario'
     }
-
 },
 { 
     timestamps: true 

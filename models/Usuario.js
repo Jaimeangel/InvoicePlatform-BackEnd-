@@ -2,6 +2,19 @@ import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
 
 const usuarioSchema=mongoose.Schema({
+    razonSocial:{
+        type:String,
+        trim:true
+    },
+    nit:{
+        type:Number,
+        trim:true
+    },
+    identificacion:{
+        type:Number,
+        require:true,
+        trim:true
+    },
     nombres:{
         type:String,
         require:true,
