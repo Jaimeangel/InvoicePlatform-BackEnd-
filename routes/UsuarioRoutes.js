@@ -1,15 +1,15 @@
 import express from 'express';
 import {
     agregarUsuario,
-    obtenerUsuarios
+    confirmacionUsuario
 } from '../controllers/UsuarioControllers.js'
+
+import checkAuth from '../middlewares/checkAuth.js';
 
 const router=express.Router();
 
-router
-    .route('/')
-    .post(agregarUsuario)
-    .get(obtenerUsuarios)
+router.post('/',agregarUsuario)
+router.get('/confirmacion/:token',confirmacionUsuario)
 
 
 export default router;
