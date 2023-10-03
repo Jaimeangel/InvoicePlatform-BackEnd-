@@ -52,8 +52,39 @@ const confirmacionUsuario= async (req,res)=>{
     }
 }
 
+const autenticarUsuario= async (req,res)=>{
+    const {email,password}=req.body;
+    const usuarioExiste= await Usuario.findOne({email})
+
+    //Comprobar si el usuario existe
+    if(!usuarioExiste){
+        const errorMsg= new Error('El usuario no esta registrado')
+        return res.status(404).json({msg:errorMsg.message})
+    }
+
+    //Comprobar si el usuario esta confirmado
+    if(!usuarioExiste.confirmado){
+        const errorMsg= new Error('El usuario aun no esta confirmado, revisa tu correo y confirma tu cuenta')
+        return res.status(403).json({msg:errorMsg.message})
+    }
+
+    if(await usuarioExiste.authenticatePassword(password)){
+        return res.status(200).json({
+            _id:usuarioExiste._id,
+            nombre:usuarioExiste.nombre,
+            email:usuarioExiste.email,
+            token:generateToken(usuarioExiste._id)
+        })
+
+    }else{
+        const errorMsg= new Error('La contraseña es incorrecta')
+        return res.status(403).json({msg:errorMsg.message})
+    }
+}
+
 
 export {
     agregarUsuario,
-    confirmacionUsuario
+    confirmacionUsuario,
+    autenticarUsuario
 }
