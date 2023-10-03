@@ -82,9 +82,65 @@ const autenticarUsuario= async (req,res)=>{
     }
 }
 
+const recuperarPassword= async (req,res)=>{
+    const {email}=req.body;
+    const usuarioExiste= await Usuario.findOne({email})
+
+    //Comprobar si el usuario existe
+    if(!usuarioExiste){
+        const errorMsg= new Error('El usuario no existe')
+        return res.status(404).json({msg:errorMsg.message})
+    }
+
+    try {
+        usuarioExiste.token=generatorId()
+        await usuarioExiste.save()
+        emailSenderRecoverPassword({
+            "nombre":usuarioExiste.nombres,
+            "email":usuarioExiste.email,
+            "token":usuarioExiste.token
+        })
+        res.json({msg:"Hemos enviado un correo con las instrucciones para gestionar su contraseña"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const verificarToken= async (req,res)=>{
+    const {token}=req.params;
+    const tokenValido = await Usuario.findOne({token})
+
+    if(tokenValido){
+        res.json({msg:"El token es valido"})
+    }else{
+        const errorMsg= new Error('El token no es valido')
+        return res.status(404).json({msg:errorMsg.message})
+    }
+}
+
+const cambiarPassword= async (req,res)=>{
+    const {password}=req.body;
+    const {token}=req.params;
+
+    const usuario= await Usuario.findOne({token})
+
+    try {
+        usuario.password=password
+        usuario.token=''
+        await usuario.save()
+        res.json({msg:'Su clave ha sido cambiada con exito'})
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
 
 export {
     agregarUsuario,
     confirmacionUsuario,
-    autenticarUsuario
+    autenticarUsuario,
+    recuperarPassword,
+    verificarToken,
+    cambiarPassword
 }

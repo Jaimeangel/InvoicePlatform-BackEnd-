@@ -2,16 +2,26 @@ import express from 'express';
 import {
     agregarUsuario,
     confirmacionUsuario,
-    autenticarUsuario
+    autenticarUsuario,
+    recuperarPassword,
+    verificarToken,
+    cambiarPassword
 } from '../controllers/UsuarioControllers.js'
 
 import checkAuth from '../middlewares/checkAuth.js';
 
 const router=express.Router();
-
+//registrar y autenticar usuario
 router.post('/',agregarUsuario)
 router.get('/confirmacion/:token',confirmacionUsuario)
+//login usuario
 router.post('/login',autenticarUsuario)
+//Recuperar contraseña
+router.post('/recuperar-password',recuperarPassword)
+router
+    .route('/recuperar-password/:token')
+    .get(verificarToken)
+    .post(cambiarPassword)
 
 
 export default router;
