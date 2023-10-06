@@ -11,10 +11,18 @@ const agregarCotizacion= async (req,res)=>{
         return res.status(403).json({msg:errorMsg.message})
     }
 }
-const obtenerCotizaciones=(req,res)=>{
-    return res.json('Mira obtenemos las cotizaciones')
-}
 
+const obtenerCotizaciones= async (req,res)=>{
+    const {user}=req;
+    try {
+        const cotizacionUsuario= await Cotizacion.find({creador:user._id})
+        return res.json(cotizacionUsuario)
+    } catch (error) {
+        console.log(error)
+        const errorMsg= new Error('No fue posible obtener los proyectos')
+        return res.status(403).json({msg:errorMsg.message})
+    }
+}
 
 export {
     agregarCotizacion,

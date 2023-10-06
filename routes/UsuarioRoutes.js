@@ -8,8 +8,7 @@ import {
     cambiarPassword
 } from '../controllers/UsuarioControllers.js'
 
-import checkAuth from '../middlewares/checkAuth.js';
-
+//Router
 const router=express.Router();
 //registrar y autenticar usuario
 router.post('/',agregarUsuario)
