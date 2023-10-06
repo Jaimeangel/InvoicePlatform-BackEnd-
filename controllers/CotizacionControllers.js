@@ -1,7 +1,10 @@
 import Cotizacion from '../models/Cotizacion.js'
 
 const agregarCotizacion= async (req,res)=>{
+    const {user}=req;
     const cotizacion= new Cotizacion(req.body)
+    cotizacion.creador=user._id
+
     try {
         await cotizacion.save()
         return res.json(cotizacion)
