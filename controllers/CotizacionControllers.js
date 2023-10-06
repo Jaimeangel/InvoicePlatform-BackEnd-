@@ -1,10 +1,10 @@
 import Cotizacion from '../models/Cotizacion.js'
 
 const agregarCotizacion= async (req,res)=>{
-    const proyecto= new Cotizacion(req.body)
+    const cotizacion= new Cotizacion(req.body)
     try {
-        await proyecto.save()
-        return res.json(proyecto)
+        await cotizacion.save()
+        return res.json(cotizacion)
     } catch (error) {
         const errorMsg= new Error('No fue posible crear la cotizacion')
         console.log(error)
@@ -15,8 +15,8 @@ const agregarCotizacion= async (req,res)=>{
 const obtenerCotizaciones= async (req,res)=>{
     const {user}=req;
     try {
-        const cotizacionUsuario= await Cotizacion.find({creador:user._id})
-        return res.json(cotizacionUsuario)
+        const cotizacionesByUsuario= await Cotizacion.find({creador:user._id})
+        return res.json(cotizacionesByUsuario)
     } catch (error) {
         console.log(error)
         const errorMsg= new Error('No fue posible obtener las cotizaciones')
