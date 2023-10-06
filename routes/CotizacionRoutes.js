@@ -1,7 +1,10 @@
 import express from 'express';
 import {
     agregarCotizacion,
-    obtenerCotizaciones
+    obtenerCotizaciones,
+    obtenerCotizacionByID,
+    editarCotizacion,
+    eliminarCotizacion
 } from '../controllers/CotizacionControllers.js'
 
 import checkAuth from '../middlewares/checkAuth.js';
@@ -15,5 +18,11 @@ router
     .post(checkAuth,agregarCotizacion)
     .get(checkAuth,obtenerCotizaciones)
 
+//operaciones para cotizacion por id
+router
+    .route('/:cotizacion')
+    .get(checkAuth,obtenerCotizacionByID)
+    .put(checkAuth,editarCotizacion)
+    .delete(checkAuth,eliminarCotizacion)
 
 export default router;
