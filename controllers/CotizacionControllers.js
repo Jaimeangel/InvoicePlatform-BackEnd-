@@ -75,8 +75,30 @@ const editarCotizacion= async (req,res)=>{
     }
 }
 
-const eliminarCotizacion=(req,res)=>{
+const eliminarCotizacion= async (req,res)=>{
+    const {cotizacion} = req.params;
+    const {user}=req;
+    try {
+        const cotizacionByID = await Cotizacion.findById(cotizacion)
 
+        if(cotizacionByID.creador.toString() !== user._id.toString()){
+            const errorMsg= new Error('No tienes los permisos para esta accion')
+            return res.status(401).json({msg:errorMsg.message})
+        }
+
+        
+        try {
+            await cotizacionByID.deleteOne()
+            res.json({msg:"La cotizacion se elimino con exito"})
+        } catch (error) {
+            console.log(error)
+        }
+
+    } catch (error) {
+        console.log(error)
+        const errorMsg= new Error('Lo sentimos, la cotizacion que trata de eliminar no existe')
+        return res.status(404).json({msg:errorMsg.message})
+    }
 }
 
 export {
