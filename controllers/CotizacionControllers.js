@@ -43,8 +43,36 @@ const obtenerCotizacionByID= async (req,res)=>{
     }
 }
 
-const editarCotizacion=(req,res)=>{
+const editarCotizacion= async (req,res)=>{
+    const {cotizacion} = req.params;
+    const {user}=req;
+    try {
+        const cotizacionByID = await Cotizacion.findById(cotizacion)
 
+        if(cotizacionByID.creador.toString() !== user._id.toString()){
+            const errorMsg= new Error('No tienes los permisos para editar la cotizacion')
+            return res.status(401).json({msg:errorMsg.message})
+        }
+
+        const valueToUpdate= Object.keys(req.body)
+        valueToUpdate.forEach(value =>{
+            if(value in cotizacionByID){
+                cotizacionByID[value]=req.body[value]
+            }
+        })
+        
+        try {
+            await cotizacionByID.save()
+            res.json(cotizacionByID)
+        } catch (error) {
+            console.log(error)
+        }
+
+    } catch (error) {
+        const errorMsg= new Error('Lo sentimos, la cotizacion que trata editar no existe')
+        console.log(error)
+        return res.status(404).json({msg:errorMsg.message})
+    }
 }
 
 const eliminarCotizacion=(req,res)=>{
