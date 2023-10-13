@@ -135,6 +135,10 @@ const cambiarPassword= async (req,res)=>{
 
 }
 
+const perfil=async (req,res)=>{
+    const {user}= req;
+    res.json(user)
+}
 
 export {
     agregarUsuario,
@@ -142,5 +146,6 @@ export {
     autenticarUsuario,
     recuperarPassword,
     verificarToken,
-    cambiarPassword
+    cambiarPassword,
+    perfil
 }

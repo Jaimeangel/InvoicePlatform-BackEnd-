@@ -4,10 +4,25 @@ import connectDB from './config/db.js';
 import CotizacionesRoutes from './routes/CotizacionRoutes.js'
 import UsuariosRoutes from './routes/UsuarioRoutes.js'
 import ClientesRoutes from './routes/ClienteRoutes.js'
+//cors
+import cors from 'cors'
 
 const App = express()
 App.use(express.json())
 const PORT = process.env.PORT || 5000;
+
+const whitelist = ['http://localhost:5173']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+App.use(cors(corsOptions))
 
 //Routing
 App.use('/api/cotizaciones',CotizacionesRoutes)

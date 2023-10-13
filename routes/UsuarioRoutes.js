@@ -5,8 +5,12 @@ import {
     autenticarUsuario,
     recuperarPassword,
     verificarToken,
-    cambiarPassword
+    cambiarPassword,
+    perfil
 } from '../controllers/UsuarioControllers.js'
+
+//middleware
+import checkAuth from '../middlewares/checkAuth.js';
 
 //Router
 const router=express.Router();
@@ -21,6 +25,7 @@ router
     .route('/recuperar-password/:token')
     .get(verificarToken)
     .post(cambiarPassword)
-
+//obtener perfil
+router.get('/perfil',checkAuth,perfil)
 
 export default router;
