@@ -11,6 +11,10 @@ const clienteSchema=mongoose.Schema({
         require:true,
         trim:true
     },
+    digitVerify:{
+        type:Number,
+        trim:true
+    },
     razonSocial:{
         type:String,
         trim:true
