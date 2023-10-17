@@ -6,6 +6,11 @@ const clienteSchema=mongoose.Schema({
         require:true,
         enum:["persona","empresa"]
     },
+    tipoIdenti:{
+        type:String,
+        require:true,
+        enum:["cedula","pasaporte","nit","cedula extranjera"]
+    },
     identificacion:{
         type:Number,
         require:true,
@@ -13,10 +18,6 @@ const clienteSchema=mongoose.Schema({
     },
     digitVerify:{
         type:Number,
-        trim:true
-    },
-    razonSocial:{
-        type:String,
         trim:true
     },
     nombres:{
@@ -27,9 +28,31 @@ const clienteSchema=mongoose.Schema({
         type:String,
         trim:true
     },
+    razonSocial:{
+        type:String,
+        trim:true
+    },
+    nombreComercial:{
+        type:String,
+        trim:true
+    },
     ciudad:{
         type:String,
         trim:true
+    },
+    direccion:{
+        type:String,
+        trim:true
+    },
+    nombreContacto:{
+        type:String,
+        trim:true,
+        require:true,
+    },
+    apellidoContacto:{
+        type:String,
+        trim:true,
+        require:true,
     },
     email:{
         type:String,
@@ -40,6 +63,11 @@ const clienteSchema=mongoose.Schema({
     },
     celular:{
         type:Number,
+    },
+    tipoFiscal:{
+        type:String,
+        require:true,
+        enum:["iva","no iva"]
     },
     creador:{
         type:mongoose.Schema.Types.ObjectId,
