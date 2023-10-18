@@ -9,6 +9,10 @@ const cotizacionSchema=mongoose.Schema({
         type:Date,
         default:Date.now()
     },
+    numeroCotizacion:{
+        type:String,
+        trim:true
+    },
     creador:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Usuario'
