@@ -83,6 +83,10 @@ const cotizacionSchema=mongoose.Schema({
     condiciones:{
         type:String,
         trim:true
+    },
+    encabezado:{
+        type:String,
+        trim:true
     }
 },
 { 
