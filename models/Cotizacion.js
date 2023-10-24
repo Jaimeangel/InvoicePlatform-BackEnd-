@@ -19,7 +19,7 @@ const cotizacionSchema=mongoose.Schema({
     },
     productos:[
         {
-            nombre:{
+            descripcion:{
                 type:String,
                 required: true,
             },
@@ -35,7 +35,16 @@ const cotizacionSchema=mongoose.Schema({
             },
             precioUnitario:{
                 type:Number,
-                trim:true,
+                required: true,
+                validate:{
+                    validator: function(value){
+                      return value >= 0;
+                    },
+                    message:"El precio unitario debe ser un número positivo",
+                }
+            },
+            impuesto:{
+                type:Number,
                 required: true,
                 validate:{
                     validator: function(value){
