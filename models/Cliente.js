@@ -72,6 +72,10 @@ const clienteSchema=mongoose.Schema({
     creador:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Usuario'
+    },
+    departamento:{
+        type:String,
+        trim:true
     }
 },
 { 
