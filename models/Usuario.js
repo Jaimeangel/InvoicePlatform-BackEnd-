@@ -42,6 +42,14 @@ const usuarioSchema=mongoose.Schema({
     confirmado:{
         type:Boolean,
         default:false
+    },
+    ciudad:{
+        type:String,
+        trim:true
+    },
+    departamento:{
+        type:String,
+        trim:true
     }
 },
 { 
