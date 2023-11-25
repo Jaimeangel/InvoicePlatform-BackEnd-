@@ -12,7 +12,6 @@ const usuarioSchema=mongoose.Schema({
     },
     identificacion:{
         type:Number,
-        require:true,
         trim:true
     },
     nombres:{
@@ -50,7 +49,48 @@ const usuarioSchema=mongoose.Schema({
     departamento:{
         type:String,
         trim:true
-    }
+    },
+    tipo:{
+        type:String,
+        require:true,
+        enum:["persona","empresa"]
+    },
+    digitVerify:{
+        type:Number,
+        trim:true
+    },
+    nombreComercial:{
+        type:String,
+        trim:true
+    },
+    direccion:{
+        type:String,
+        trim:true
+    },
+    celularEmpresarial:{
+        type:Number,
+    },
+    tipoFiscal:{
+        type:String,
+        require:true,
+        enum:["iva","no iva"]
+    },
+    tipoIdenti:{
+        type:String,
+        require:true,
+        enum:["cedula","pasaporte","nit","cedula extranjera"]
+    },
+    cargoRepresentante:{
+        type:String,
+        trim:true
+    },
+    emailRepresentante:{
+        type:String,
+        trim:true,
+    },
+    celularRepresentante:{
+        type:Number,
+    },
 },
 { 
     timestamps: true 
