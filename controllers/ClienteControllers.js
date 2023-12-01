@@ -4,6 +4,7 @@ const agregarCliente= async (req,res)=>{
     const {user}=req;
     const cliente= new Cliente(req.body)
     cliente.creador=user._id
+    
     try {
         await cliente.save()
         return res.json(cliente)

@@ -6,6 +6,8 @@ import UsuariosRoutes from './routes/UsuarioRoutes.js'
 import ClientesRoutes from './routes/ClienteRoutes.js'
 //cors
 import cors from 'cors'
+//fileuploads
+import fileUpload from 'express-fileupload';
 
 import init from './AWS/s3GetObject.js';
 
@@ -25,7 +27,7 @@ const corsOptions = {
 }
 
 App.use(cors(corsOptions))
-
+App.use(fileUpload());
 //Routing
 App.use('/api/cotizaciones',CotizacionesRoutes)
 App.use('/api/usuarios',UsuariosRoutes)
@@ -37,7 +39,7 @@ const server =  App.listen(PORT,()=>{
 
 connectDB()
 
-init()
+/* init() */
 
 
 

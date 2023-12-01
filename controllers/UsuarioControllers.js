@@ -4,6 +4,8 @@ import Usuario from "../models/Usuario.js"
 import generatorId from "../helpers/generatorId.js"
 import generateToken from "../helpers/generateToken.js";
 import {emailSenderConfirmAccount,emailSenderRecoverPassword } from '../helpers/email.js'
+//AWS postObject
+import postImagenToBucket from "../AWS/s3PutObject.js";
 
 const agregarUsuario= async (req,res)=>{
     const {email}=req.body;
@@ -135,6 +137,25 @@ const cambiarPassword= async (req,res)=>{
 
 }
 
+const cargarImagenesUsuario = async (req,res)=>{
+    if(!req.files){
+        return res.status(400).send('No files were uploaded.');
+    }else{
+        const {image}=req.files;
+        const dataFile=image.data;
+        const nameFile='data-imagen-by-post';
+        const bucket = 'invoice-platform-images';
+
+        try {
+            const response = await postImagenToBucket(bucket,dataFile,nameFile)
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+}
+
 const perfil=async (req,res)=>{
     const {user}= req;
     res.json(user)
@@ -147,5 +168,6 @@ export {
     recuperarPassword,
     verificarToken,
     cambiarPassword,
-    perfil
+    perfil,
+    cargarImagenesUsuario
 }
