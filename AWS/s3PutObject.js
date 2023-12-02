@@ -18,7 +18,6 @@ async function postImagenToBucket(bucketName,file,nombreFile){
         ContentType: 'image/png',  // Especifica el tipo de contenido adecuado
     });
     const response = await s3ClientImagenes.send(command);
-    console.log('respuesta postImage',response)
     return response
 }
 

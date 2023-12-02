@@ -7,7 +7,8 @@ import {
     verificarToken,
     cambiarPassword,
     perfil,
-    cargarImageneUsuarioProfile
+    cargarImageneUsuarioProfile,
+    cargarImageneUsuarioCotizacion
 } from '../controllers/UsuarioControllers.js'
 
 //middleware
@@ -30,5 +31,6 @@ router
 router.get('/perfil',checkAuth,perfil)
 //cargar imagenes
 router.post('/imagenes-upload-profile',checkAuth,cargarImageneUsuarioProfile)
+router.post('/imagenes-upload-cotizacion',checkAuth,cargarImageneUsuarioCotizacion)
 
 export default router;

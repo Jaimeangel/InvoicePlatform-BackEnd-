@@ -141,7 +141,6 @@ const cambiarPassword= async (req,res)=>{
 const cargarImageneUsuarioProfile = async (req,res)=>{
     const {image} = req.files;
     const {user} = req;
-    console.log(user)
     const usuario = await Usuario.findOne({_id:user._id})
 
     if(!req.files){
@@ -172,6 +171,39 @@ const cargarImageneUsuarioProfile = async (req,res)=>{
     }
 }
 
+const cargarImageneUsuarioCotizacion = async (req,res)=>{
+    const {image} = req.files;
+    const {user} = req;
+    const usuario = await Usuario.findOne({_id:user._id})
+
+    if(!req.files){
+        const errorMsg= new Error('No files were uploaded.')
+        return res.status(400).json({msg:errorMsg.message})
+    }else{
+        const dataFile=image.data;
+        const nameFile=`${user._id}-image-cotizacion`;
+        const bucket = 'invoice-platform-images-public';
+
+        try {
+            const response = await postImagenToBucket(bucket,dataFile,nameFile)
+            const imagenURL = await GetObjectURLBucketPublic(nameFile)
+            try {
+                usuario.images.cotizacionImage.url=imagenURL
+                await usuario.save()
+                res.status(200).send('Imagen subida con exito')
+            } catch (error) {
+                const errorMsg= new Error('algo salio mal de nuestro lado, no fue posible actualizar DB')
+                return res.status(503).json({msg:errorMsg.message})
+            }
+
+        } catch (error) {
+            const errorMsg= new Error('No fue posible subirlo al bucket de Amazon')
+            return res.status(503).json({msg:errorMsg.message})
+        }
+        
+    }
+}
+
 const perfil=async (req,res)=>{
     const {user}= req;
     res.json(user)
@@ -185,5 +217,6 @@ export {
     verificarToken,
     cambiarPassword,
     perfil,
-    cargarImageneUsuarioProfile
+    cargarImageneUsuarioProfile,
+    cargarImageneUsuarioCotizacion
 }
