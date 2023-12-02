@@ -91,6 +91,26 @@ const usuarioSchema=mongoose.Schema({
     celularRepresentante:{
         type:Number,
     },
+    images:{
+        profileImange:{
+            url:{
+                type:String,
+                trim:true,
+            }
+        },
+        cotizacionImage:{
+            url:{
+                type:String,
+                trim:true,
+            }
+        },
+        firmaRepresentante:{
+            url:{
+                type:String,
+                trim:true,
+            }
+        }
+    }
 },
 { 
     timestamps: true 

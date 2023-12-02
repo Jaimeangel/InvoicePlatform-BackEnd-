@@ -30,10 +30,7 @@ async function GetObjectURLBucketPublic(key){
     return URL
 }
 
-async function init(){
-    const URL = await GetObjectURLBucketPublic('reto ADA.png')
-    console.log(URL)
-
+export {
+    GetObjectURLBucketPublic,
+    GetObjectURLBucketPrivate
 }
-
-export default init;

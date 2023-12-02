@@ -9,8 +9,6 @@ import cors from 'cors'
 //fileuploads
 import fileUpload from 'express-fileupload';
 
-import init from './AWS/s3GetObject.js';
-
 const App = express()
 App.use(express.json())
 const PORT = process.env.PORT || 5000;
@@ -38,8 +36,6 @@ const server =  App.listen(PORT,()=>{
 })
 
 connectDB()
-
-/* init() */
 
 
 

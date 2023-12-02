@@ -1,5 +1,4 @@
 import { S3Client,PutObjectCommand} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv"
 dotenv.config()
 
@@ -11,14 +10,6 @@ const s3ClientImagenes = new S3Client({
     }
 })
 
-/* const params = {
-    Bucket: bucketName, //el buckets nombre
-    Key: fileName, //nombre de la imagen
-    Body: imageData,// contenio de la imange
-    ContentType: 'image/png',  // Especifica el tipo de contenido adecuado
-}; */
-
-
 async function postImagenToBucket(bucketName,file,nombreFile){
     const command = new PutObjectCommand({
         Bucket: bucketName, //el buckets nombre
@@ -27,6 +18,7 @@ async function postImagenToBucket(bucketName,file,nombreFile){
         ContentType: 'image/png',  // Especifica el tipo de contenido adecuado
     });
     const response = await s3ClientImagenes.send(command);
+    console.log('respuesta postImage',response)
     return response
 }
 

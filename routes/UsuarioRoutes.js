@@ -7,7 +7,7 @@ import {
     verificarToken,
     cambiarPassword,
     perfil,
-    cargarImagenesUsuario
+    cargarImageneUsuarioProfile
 } from '../controllers/UsuarioControllers.js'
 
 //middleware
@@ -29,6 +29,6 @@ router
 //obtener perfil
 router.get('/perfil',checkAuth,perfil)
 //cargar imagenes
-router.post('/imagenes-upload',cargarImagenesUsuario)
+router.post('/imagenes-upload-profile',checkAuth,cargarImageneUsuarioProfile)
 
 export default router;
