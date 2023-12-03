@@ -7,7 +7,7 @@ const agregarCliente= async (req,res)=>{
     
     try {
         await cliente.save()
-        return res.json(cliente)
+        return res.status(200).json(cliente)
     } catch (error) {
         const errorMsg= new Error('No fue posible crear el cliente')
         console.log(error)

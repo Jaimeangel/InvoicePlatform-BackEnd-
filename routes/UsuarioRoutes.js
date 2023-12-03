@@ -8,7 +8,8 @@ import {
     cambiarPassword,
     perfil,
     cargarImageneUsuarioProfile,
-    cargarImageneUsuarioCotizacion
+    cargarImageneUsuarioCotizacion,
+    cargarImageneUsuarioFirmaDigital
 } from '../controllers/UsuarioControllers.js'
 
 //middleware
@@ -32,5 +33,6 @@ router.get('/perfil',checkAuth,perfil)
 //cargar imagenes
 router.post('/imagenes-upload-profile',checkAuth,cargarImageneUsuarioProfile)
 router.post('/imagenes-upload-cotizacion',checkAuth,cargarImageneUsuarioCotizacion)
+router.post('/imagenes-upload-firma-digital',checkAuth,cargarImageneUsuarioFirmaDigital)
 
 export default router;

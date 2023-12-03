@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
 
-const usuarioSchema=mongoose.Schema({
+const usuarioSchema = mongoose.Schema({
     razonSocial:{
         type:String,
         trim:true
