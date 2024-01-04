@@ -9,6 +9,8 @@ import cors from 'cors'
 //fileuploads
 import fileUpload from 'express-fileupload';
 
+import { GetPdfURLBucketPrivate } from './AWS/s3GetObject.js';
+
 const App = express()
 App.use(express.json())
 const PORT = process.env.PORT || 5000;

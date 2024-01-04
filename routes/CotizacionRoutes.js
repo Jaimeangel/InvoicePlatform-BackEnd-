@@ -4,7 +4,8 @@ import {
     obtenerCotizaciones,
     obtenerCotizacionByID,
     editarCotizacion,
-    eliminarCotizacion
+    eliminarCotizacion,
+    enviarCotizacion
 } from '../controllers/CotizacionControllers.js'
 
 import checkAuth from '../middlewares/checkAuth.js';
@@ -24,5 +25,7 @@ router
     .get(checkAuth,obtenerCotizacionByID)
     .put(checkAuth,editarCotizacion)
     .delete(checkAuth,eliminarCotizacion)
+
+router.post('/document-pdf-upload',checkAuth,enviarCotizacion)
 
 export default router;

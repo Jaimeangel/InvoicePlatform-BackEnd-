@@ -5,8 +5,13 @@ import generatorId from "../helpers/generatorId.js"
 import generateToken from "../helpers/generateToken.js";
 import {emailSenderConfirmAccount,emailSenderRecoverPassword } from '../helpers/email.js'
 //AWS postObject
-import postImagenToBucket from "../AWS/s3PutObject.js";
-import {GetObjectURLBucketPublic} from '../AWS/s3GetObject.js'
+import {
+    postImagenToBucket
+} from "../AWS/s3PutObject.js";
+
+import { 
+    GetImagenURLBucketPublic
+} from '../AWS/s3GetObject.js'
 
 const agregarUsuario= async (req,res)=>{
     const {email}=req.body;
@@ -149,11 +154,10 @@ const cargarImageneUsuarioProfile = async (req,res)=>{
     }else{
         const dataFile=image.data;
         const nameFile=`${user._id}-image-profile`;
-        const bucket = 'invoice-platform-images-public';
 
         try {
-            const response = await postImagenToBucket(bucket,dataFile,nameFile)
-            const imagenURL = await GetObjectURLBucketPublic(nameFile)
+            const response = await postImagenToBucket(dataFile,nameFile)
+            const imagenURL = await GetImagenURLBucketPublic(nameFile)
             try {
                 usuario.images.profileImange.url=imagenURL
                 await usuario.save()
@@ -182,11 +186,10 @@ const cargarImageneUsuarioCotizacion = async (req,res)=>{
     }else{
         const dataFile=image.data;
         const nameFile=`${user._id}-image-cotizacion`;
-        const bucket = 'invoice-platform-images-public';
 
         try {
-            const response = await postImagenToBucket(bucket,dataFile,nameFile)
-            const imagenURL = await GetObjectURLBucketPublic(nameFile)
+            const response = await postImagenToBucket(dataFile,nameFile)
+            const imagenURL = await GetImagenURLBucketPublic(nameFile)
             try {
                 usuario.images.cotizacionImage.url=imagenURL
                 await usuario.save()
@@ -215,11 +218,10 @@ const cargarImageneUsuarioFirmaDigital = async (req,res)=>{
     }else{
         const dataFile=image.data;
         const nameFile=`${user._id}-image-firma-digital`;
-        const bucket = 'invoice-platform-images-public';
 
         try {
-            const response = await postImagenToBucket(bucket,dataFile,nameFile)
-            const imagenURL = await GetObjectURLBucketPublic(nameFile)
+            const response = await postImagenToBucket(dataFile,nameFile)
+            const imagenURL = await GetImagenURLBucketPublic(nameFile)
             try{
                 usuario.images.firmaRepresentante.url=imagenURL
                 await usuario.save()

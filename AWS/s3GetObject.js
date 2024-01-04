@@ -3,7 +3,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv"
 dotenv.config()
 
-const s3ClientImagenes = new S3Client({
+const s3ClientBucketPermissions = new S3Client({
     region:process.env.REGION_S3_INVOICE_PLATFORM_IMAGES,
     credentials:{
         accessKeyId:process.env.ACCESS_KEY_ID_USER_IAM_InvoicePlatformAccessS3,
@@ -11,26 +11,37 @@ const s3ClientImagenes = new S3Client({
     }
 })
 
-async function GetObjectURLBucketPrivate(key){
+async function GetImagenURLBucketPrivate(key){
     const command= new GetObjectCommand({
         Bucket:'invoice-platform-images',
         Key:key
     })
-    const URL = await getSignedUrl(s3ClientImagenes,command)
+    const URL = await getSignedUrl(s3ClientBucketPermissions,command)
     return URL
 }
 
-async function GetObjectURLBucketPublic(key){
+async function GetImagenURLBucketPublic(key){
     const command= new GetObjectCommand({
         Bucket:'invoice-platform-images-public',
         Key:key
     })
-    const response = await s3ClientImagenes.send(command)
+    const response = await s3ClientBucketPermissions.send(command)
     const URL = `${response.Body.req.protocol}${response.Body.req.host}${response.Body.req.path}`
     return URL
 }
 
+async function GetPdfURLBucketPrivate(key){
+    const command= new GetObjectCommand({
+        Bucket:'invoice-platform-pdf-document-private',
+        Key:key
+    })
+    const expiresInSeconds = 180;
+    const URL = await getSignedUrl(s3ClientBucketPermissions,command, { expiresIn: expiresInSeconds })
+    return URL
+}
+
 export {
-    GetObjectURLBucketPublic,
-    GetObjectURLBucketPrivate
+    GetImagenURLBucketPublic,
+    GetImagenURLBucketPrivate,
+    GetPdfURLBucketPrivate
 }

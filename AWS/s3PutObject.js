@@ -2,7 +2,7 @@ import { S3Client,PutObjectCommand} from "@aws-sdk/client-s3";
 import dotenv from "dotenv"
 dotenv.config()
 
-const s3ClientImagenes = new S3Client({
+const s3ClientBucketPermissions = new S3Client({
     region:process.env.REGION_S3_INVOICE_PLATFORM_IMAGES,
     credentials:{
         accessKeyId:process.env.ACCESS_KEY_ID_USER_IAM_InvoicePlatformAccessS3,
@@ -10,15 +10,29 @@ const s3ClientImagenes = new S3Client({
     }
 })
 
-async function postImagenToBucket(bucketName,file,nombreFile){
+async function postImagenToBucket(file,nombreFile){
     const command = new PutObjectCommand({
-        Bucket: bucketName, //el buckets nombre
+        Bucket: 'invoice-platform-images-public', //el buckets nombre
         Key: nombreFile, //nombre de la imagen
         Body: file,// contenio de la imange
         ContentType: 'image/png',  // Especifica el tipo de contenido adecuado
     });
-    const response = await s3ClientImagenes.send(command);
+    const response = await s3ClientBucketPermissions.send(command);
     return response
 }
 
-export default postImagenToBucket;
+async function postPdfToBucket(file,nombreFile){
+    const command = new PutObjectCommand({
+        Bucket: 'invoice-platform-pdf-document-private', //el buckets nombre
+        Key: nombreFile, //nombre de la imagen
+        Body: file,// contenio de la imange
+        ContentType: 'application/pdf',  // Especifica el tipo de contenido adecuado
+    });
+    const response = await s3ClientBucketPermissions.send(command);
+    return response
+}
+
+export {
+    postImagenToBucket,
+    postPdfToBucket
+}

@@ -1,6 +1,9 @@
 import Cotizacion from '../models/Cotizacion.js'
 
-const agregarCotizacion= async (req,res)=>{
+import { postPdfToBucket } from '../AWS/s3PutObject.js';
+import { GetPdfURLBucketPrivate } from '../AWS/s3GetObject.js';
+
+const agregarCotizacion = async (req,res)=>{
     const {user}=req;
     const cotizacion= new Cotizacion(req.body)
     cotizacion.creador=user._id
@@ -15,7 +18,7 @@ const agregarCotizacion= async (req,res)=>{
     }
 }
 
-const obtenerCotizaciones= async (req,res)=>{
+const obtenerCotizaciones = async (req,res)=>{
     const {user}=req;
     try {
         const cotizacionesByUsuario= await Cotizacion.find({creador:user._id})
@@ -27,7 +30,7 @@ const obtenerCotizaciones= async (req,res)=>{
     }
 }
 
-const obtenerCotizacionByID= async (req,res)=>{
+const obtenerCotizacionByID = async (req,res)=>{
     const {cotizacion} = req.params;
     const {user}=req;
     try {
@@ -46,7 +49,7 @@ const obtenerCotizacionByID= async (req,res)=>{
     }
 }
 
-const editarCotizacion= async (req,res)=>{
+const editarCotizacion = async (req,res)=>{
     const {cotizacion} = req.params;
     const {user}=req;
     try {
@@ -78,7 +81,7 @@ const editarCotizacion= async (req,res)=>{
     }
 }
 
-const eliminarCotizacion= async (req,res)=>{
+const eliminarCotizacion = async (req,res)=>{
     const {cotizacion} = req.params;
     const {user}=req;
     try {
@@ -104,10 +107,34 @@ const eliminarCotizacion= async (req,res)=>{
     }
 }
 
+const enviarCotizacion = async (req,res)=>{
+    const {pdf} = req.files
+    const {user} = req;
+
+    if(pdf === null){
+        const errorMsg= new Error('No files were uploaded.')
+        return res.status(400).json({msg:errorMsg.message})
+    }else{
+        const dataFile=pdf.data;
+        const nameFile=`${user._id}-document-pdf-444.pdf`;
+
+        try {
+            const response = await postPdfToBucket(dataFile,nameFile)
+            const imagenURL = await GetPdfURLBucketPrivate(nameFile)
+            return res.status(200).json({url:imagenURL})
+        } catch (error) {
+            const errorMsg= new Error('No fue posible subirlo al bucket de Amazon')
+            return res.status(503).json({msg:errorMsg.message})
+        }
+        
+    }
+}
+
 export {
     agregarCotizacion,
     obtenerCotizaciones,
     obtenerCotizacionByID,
     editarCotizacion,
-    eliminarCotizacion
+    eliminarCotizacion,
+    enviarCotizacion
 }
