@@ -7,6 +7,7 @@ import { GetPdfURLBucketPrivate } from '../AWS/s3GetObject.js';
 
 // email helpers
 import { poolEnviarEmail } from '../helpers/email/senders.js';
+import { poolEnviarCelular } from '../helpers/celular/senders.js';
 import extraerInformacion from '../helpers/extraerInformacion.js';
 
 
@@ -148,10 +149,17 @@ const enviarCotizacion = async (req,res)=>{
             const imagenURL = await GetPdfURLBucketPrivate(nameFile)
             return res.status(200).json({url:imagenURL}) */
 
-            await poolEnviarEmail({
+/*             await poolEnviarEmail({
                 usuario:nameUsuario,
                 cliente:nameCliente,
                 listaDestinario:dataContacto.email.destinos,
+                referencia:dataCotizacion.numeroCotizacion,
+                file:"https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf"
+            }) */
+
+            await poolEnviarCelular({
+                cliente:nameCliente,
+                listaDestinario:dataContacto.celular.destinos,
                 referencia:dataCotizacion.numeroCotizacion,
                 file:"https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf"
             })

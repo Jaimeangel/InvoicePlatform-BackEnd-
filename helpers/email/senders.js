@@ -42,7 +42,8 @@ async function poolEnviarEmail(data){
         usuario,
         cliente,
         listaDestinario,
-        referencia
+        referencia,
+        file
     } = data;
 
     for(const correo of listaDestinario){
@@ -50,12 +51,12 @@ async function poolEnviarEmail(data){
             usuario,
             cliente,
             destinatario:correo,
-            referencia
+            referencia,
+            file
         })
     }
 }
 
 export {
-    poolEnviarEmail,
-    enviarEmailTemplate
+    poolEnviarEmail
 }
