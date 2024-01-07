@@ -1,7 +1,14 @@
+// model
 import Cotizacion from '../models/Cotizacion.js'
 
+// aws helpers
 import { postPdfToBucket } from '../AWS/s3PutObject.js';
 import { GetPdfURLBucketPrivate } from '../AWS/s3GetObject.js';
+
+// email helpers
+import { poolEnviarEmail } from '../helpers/email/senders.js';
+import extraerInformacion from '../helpers/extraerInformacion.js';
+
 
 const agregarCotizacion = async (req,res)=>{
     const {user}=req;
@@ -22,7 +29,10 @@ const obtenerCotizaciones = async (req,res)=>{
     const {user}=req;
     try {
         const cotizacionesByUsuario= await Cotizacion.find({creador:user._id})
-        return res.json(cotizacionesByUsuario)
+        return res.json({
+            cotizaciones : cotizacionesByUsuario,
+            lengthCotizaciones: Object.keys(cotizacionesByUsuario).length
+        })
     } catch (error) {
         console.log(error)
         const errorMsg= new Error('No fue posible obtener las cotizaciones')
@@ -108,8 +118,23 @@ const eliminarCotizacion = async (req,res)=>{
 }
 
 const enviarCotizacion = async (req,res)=>{
-    const {pdf} = req.files
-    const {user} = req;
+    const { pdf } = req.files
+    const { user } = req;
+
+    const { 
+        contacto,
+        cotizacion,
+        cliente 
+    } = req.body;
+    
+    const dataContacto = JSON.parse(contacto)
+    const dataCotizacion = JSON.parse(cotizacion)
+    const dataCliente = JSON.parse(cliente)
+
+    const {
+        nameUsuario,
+        nameCliente
+    } = extraerInformacion(user,dataCliente)
 
     if(pdf === null){
         const errorMsg= new Error('No files were uploaded.')
@@ -119,9 +144,17 @@ const enviarCotizacion = async (req,res)=>{
         const nameFile=`${user._id}-document-pdf-444.pdf`;
 
         try {
-            const response = await postPdfToBucket(dataFile,nameFile)
+/*             const response = await postPdfToBucket(dataFile,nameFile)
             const imagenURL = await GetPdfURLBucketPrivate(nameFile)
-            return res.status(200).json({url:imagenURL})
+            return res.status(200).json({url:imagenURL}) */
+
+            await poolEnviarEmail({
+                usuario:nameUsuario,
+                cliente:nameCliente,
+                listaDestinario:dataContacto.email.destinos,
+                referencia:dataCotizacion.numeroCotizacion,
+                file:"https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf"
+            })
         } catch (error) {
             const errorMsg= new Error('No fue posible subirlo al bucket de Amazon')
             return res.status(503).json({msg:errorMsg.message})
