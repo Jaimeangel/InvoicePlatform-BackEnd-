@@ -60,7 +60,6 @@ async function enviarCelularTemplate(data){
     }
     try {
         const response = await axios.post('https://graph.facebook.com/v17.0/185249261346930/messages',body,config)
-        console.log(response)
     } catch (error) {
         console.log(error)
     }

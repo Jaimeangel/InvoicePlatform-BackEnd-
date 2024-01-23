@@ -145,24 +145,26 @@ const enviarCotizacion = async (req,res)=>{
         const nameFile=`${user._id}-document-pdf-444.pdf`;
 
         try {
-/*             const response = await postPdfToBucket(dataFile,nameFile)
+            const response = await postPdfToBucket(dataFile,nameFile)
             const imagenURL = await GetPdfURLBucketPrivate(nameFile)
-            return res.status(200).json({url:imagenURL}) */
 
-/*             await poolEnviarEmail({
+            await poolEnviarEmail({
                 usuario:nameUsuario,
                 cliente:nameCliente,
                 listaDestinario:dataContacto.email.destinos,
                 referencia:dataCotizacion.numeroCotizacion,
-                file:"https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf"
-            }) */
+                file:imagenURL
+            })
 
             await poolEnviarCelular({
                 cliente:nameCliente,
                 listaDestinario:dataContacto.celular.destinos,
                 referencia:dataCotizacion.numeroCotizacion,
-                file:"https://slicedinvoices.com/pdf/wordpress-pdf-invoice-plugin-sample.pdf"
+                file:imagenURL
             })
+
+            return res.status(200).json({msg:'cotizacion enviada con exito'})
+            
         } catch (error) {
             const errorMsg= new Error('No fue posible subirlo al bucket de Amazon')
             return res.status(503).json({msg:errorMsg.message})
