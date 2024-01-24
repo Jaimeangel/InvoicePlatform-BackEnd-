@@ -11,14 +11,11 @@ import { poolEnviarCelular } from '../helpers/celular/senders.js';
 import extraerInformacion from '../helpers/extraerInformacion.js';
 
 
-const agregarCotizacion = async (req,res)=>{
-    const {user}=req;
-    const cotizacion= new Cotizacion(req.body)
-    cotizacion.creador=user._id
-
+const agregarCotizacion = async (data)=>{
+    const cotizacion= new Cotizacion(data)
     try {
         await cotizacion.save()
-        return res.json(cotizacion)
+        return res.status(200).json({cotizacion:cotizacion})
     } catch (error) {
         const errorMsg= new Error('No fue posible crear la cotizacion')
         console.log(error)
@@ -122,13 +119,11 @@ const enviarCotizacion = async (req,res)=>{
     const { pdf } = req.files
     const { user } = req;
 
-    const { 
-        contacto,
+    const {
         cotizacion,
         cliente 
     } = req.body;
     
-    const dataContacto = JSON.parse(contacto)
     const dataCotizacion = JSON.parse(cotizacion)
     const dataCliente = JSON.parse(cliente)
 
@@ -142,7 +137,7 @@ const enviarCotizacion = async (req,res)=>{
         return res.status(400).json({msg:errorMsg.message})
     }else{
         const dataFile=pdf.data;
-        const nameFile=`${user._id}-document-pdf-444.pdf`;
+        const nameFile=`${user._id}-document-pdf-cotizacion-${dataCotizacion.numeroCotizacion}.pdf`;
 
         try {
             const response = await postPdfToBucket(dataFile,nameFile)
@@ -151,17 +146,20 @@ const enviarCotizacion = async (req,res)=>{
             await poolEnviarEmail({
                 usuario:nameUsuario,
                 cliente:nameCliente,
-                listaDestinario:dataContacto.email.destinos,
+                listaDestinario:dataCotizacion.email.destinos,
                 referencia:dataCotizacion.numeroCotizacion,
                 file:imagenURL
             })
 
             await poolEnviarCelular({
                 cliente:nameCliente,
-                listaDestinario:dataContacto.celular.destinos,
+                listaDestinario:dataCotizacion.celular.destinos,
                 referencia:dataCotizacion.numeroCotizacion,
                 file:imagenURL
             })
+
+            const cotizacion = new Cotizacion(dataCotizacion)
+            await cotizacion.save()
 
             return res.status(200).json({msg:'cotizacion enviada con exito'})
             

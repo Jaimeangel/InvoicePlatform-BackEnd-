@@ -239,7 +239,7 @@ const cargarImageneUsuarioFirmaDigital = async (req,res)=>{
     }
 }
 
-const perfil=async (req,res)=>{
+const perfil = async (req,res)=>{
     const {user}= req;
     res.json(user)
 }

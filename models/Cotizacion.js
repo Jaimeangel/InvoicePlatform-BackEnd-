@@ -53,6 +53,16 @@ const cotizacionSchema=mongoose.Schema({
                     message:"El precio unitario debe ser un número positivo",
                 }
             },
+            total:{
+                type:Number,
+                required: true,
+                validate:{
+                    validator: function(value){
+                      return value >= 0;
+                    },
+                    message:"El precio unitario debe ser un número positivo",
+                }
+            }
         }
     ],
     valorTotal:{
@@ -90,12 +100,28 @@ const cotizacionSchema=mongoose.Schema({
         trim:true
     },
     condiciones:{
-        type:String,
-        trim:true
+        titulo:{
+            type:String,
+            required: true,
+        },
+        text:{
+            type:String,
+            required: true,
+        }
     },
     encabezado:{
         type:String,
         trim:true
+    },
+    celular: {
+        destinos: {
+          type: [Number]
+        }
+    },
+    email: {
+        destinos: {
+          type: [String]
+        }
     }
 },
 { 
