@@ -239,6 +239,27 @@ const cargarImageneUsuarioFirmaDigital = async (req,res)=>{
     }
 }
 
+const actualizarInformacionUsuarioTypeEmpresa = async (req,res)=>{
+    const data = req.body
+    const {user} = req;
+    const ID = user._id
+
+    const usuarioExiste = await Usuario.findOne({_id:ID})
+
+    if(!usuarioExiste){
+        const error = new Error('El usuario que trata de actualizar no existe')
+        return res.status(404).json({msg:error.message})
+    }
+
+    try {
+        await Usuario.findOneAndUpdate({_id:ID},data)
+        return res.status(200).json({msg:'Hemos actualizado el usuario con exito'})
+    } catch (error) {
+        const errorMsg= new Error('no fue posible actualizar la informacion del usuario, intentalo mas tarde')
+        return res.status(503).json({msg:errorMsg.message})
+    }
+}
+
 const perfil = async (req,res)=>{
     const {user}= req;
     res.json(user)
@@ -254,5 +275,6 @@ export {
     perfil,
     cargarImageneUsuarioProfile,
     cargarImageneUsuarioCotizacion,
-    cargarImageneUsuarioFirmaDigital
+    cargarImageneUsuarioFirmaDigital,
+    actualizarInformacionUsuarioTypeEmpresa
 }

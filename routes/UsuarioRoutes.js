@@ -9,7 +9,8 @@ import {
     perfil,
     cargarImageneUsuarioProfile,
     cargarImageneUsuarioCotizacion,
-    cargarImageneUsuarioFirmaDigital
+    cargarImageneUsuarioFirmaDigital,
+    actualizarInformacionUsuarioTypeEmpresa
 } from '../controllers/UsuarioControllers.js'
 
 //middleware
@@ -34,5 +35,8 @@ router.get('/perfil',checkAuth,perfil)
 router.post('/imagenes-upload-profile',checkAuth,cargarImageneUsuarioProfile)
 router.post('/imagenes-upload-cotizacion',checkAuth,cargarImageneUsuarioCotizacion)
 router.post('/imagenes-upload-firma-digital',checkAuth,cargarImageneUsuarioFirmaDigital)
+
+//actualizar informacion usuario
+router.post('/actualizar-usuario-empresa',checkAuth,actualizarInformacionUsuarioTypeEmpresa)
 
 export default router;
