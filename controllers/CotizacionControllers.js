@@ -115,9 +115,48 @@ const eliminarCotizacion = async (req,res)=>{
     }
 }
 
-const enviarCotizacion = async (req,res)=>{
+const guardarCotizacion = async (req,res)=>{
     const { pdf } = req.files
     const { user } = req;
+
+    const {
+        cotizacion
+    } = req.body;
+    
+    const dataCotizacion = JSON.parse(cotizacion)
+
+    if(pdf === null){
+        const errorMsg= new Error('No files were uploaded.')
+        return res.status(400).json({msg:errorMsg.message})
+    }else{
+        const dataFile=pdf.data;
+        const nameFile=`${user._id}-document-pdf-cotizacion-${dataCotizacion.numeroCotizacion}.pdf`;
+
+        try {
+            const guardarPdfBucket = await postPdfToBucket(dataFile,nameFile)
+
+            try {
+                const cotizacion = new Cotizacion(dataCotizacion)
+                cotizacion.nameFileCotizacionBucket = nameFile
+                await cotizacion.save()
+
+                return res.status(200).json({
+                    msg:'cotizacion enviada con exito',
+                    idCotizacion:cotizacion._id
+                })
+            } catch (error) {
+                const errorMsg= new Error('No fue posible guardar tu cotizacion, intentalo de nuevo')
+                return res.status(503).json({msg:errorMsg.message})
+            }
+        } catch (error) {
+            const errorMsg= new Error('No fue posible guardar tu pdf, intentalo de nuevo')
+            return res.status(503).json({msg:errorMsg.message})
+        }
+        
+    }
+}
+
+const enviarCotizacionMovil= async (req,res)=>{
 
     const {
         cotizacion,
@@ -132,16 +171,46 @@ const enviarCotizacion = async (req,res)=>{
         nameCliente
     } = extraerInformacion(user,dataCliente)
 
-    if(pdf === null){
-        const errorMsg= new Error('No files were uploaded.')
-        return res.status(400).json({msg:errorMsg.message})
-    }else{
-        const dataFile=pdf.data;
-        const nameFile=`${user._id}-document-pdf-cotizacion-${dataCotizacion.numeroCotizacion}.pdf`;
+    try {
+        const imagenURL = await GetPdfURLBucketPrivate(nameFile)
 
         try {
-            const response = await postPdfToBucket(dataFile,nameFile)
-            const imagenURL = await GetPdfURLBucketPrivate(nameFile)
+            await poolEnviarCelular({
+                cliente:nameCliente,
+                listaDestinario:dataCotizacion.celular.destinos,
+                referencia:dataCotizacion.numeroCotizacion,
+                file:imagenURL
+            })
+
+            return res.status(200).json({msg:'cotizacion enviada con exito'})
+        } catch (error) {
+            const errorMsg= new Error('No fue posible enviar tu cotizacion, intentalo de nuevo')
+            return res.status(503).json({msg:errorMsg.message})
+        }
+    } catch (error) {
+        const errorMsg= new Error('No pudimos obtener URL cotizacion')
+        return res.status(503).json({msg:errorMsg.message})
+    }
+}
+
+const enviarCotizacionEmail= async (req,res)=>{
+    const {
+        cotizacion,
+        cliente 
+    } = req.body;
+    
+    const dataCotizacion = JSON.parse(cotizacion)
+    const dataCliente = JSON.parse(cliente)
+
+    const {
+        nameUsuario,
+        nameCliente
+    } = extraerInformacion(user,dataCliente)
+
+    try {
+        const imagenURL = await GetPdfURLBucketPrivate(nameFile)
+
+        try {
 
             await poolEnviarEmail({
                 usuario:nameUsuario,
@@ -151,23 +220,14 @@ const enviarCotizacion = async (req,res)=>{
                 file:imagenURL
             })
 
-            await poolEnviarCelular({
-                cliente:nameCliente,
-                listaDestinario:dataCotizacion.celular.destinos,
-                referencia:dataCotizacion.numeroCotizacion,
-                file:imagenURL
-            })
-
-            const cotizacion = new Cotizacion(dataCotizacion)
-            await cotizacion.save()
-
             return res.status(200).json({msg:'cotizacion enviada con exito'})
-            
         } catch (error) {
-            const errorMsg= new Error('No fue posible subirlo al bucket de Amazon')
+            const errorMsg= new Error('No fue posible enviar tu cotizacion, intentalo de nuevo')
             return res.status(503).json({msg:errorMsg.message})
         }
-        
+    } catch (error) {
+        const errorMsg= new Error('No pudimos obtener URL cotizacion')
+        return res.status(503).json({msg:errorMsg.message})
     }
 }
 
@@ -177,5 +237,7 @@ export {
     obtenerCotizacionByID,
     editarCotizacion,
     eliminarCotizacion,
-    enviarCotizacion
+    guardarCotizacion,
+    enviarCotizacionMovil,
+    enviarCotizacionEmail
 }

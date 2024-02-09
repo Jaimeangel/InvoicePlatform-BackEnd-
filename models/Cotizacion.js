@@ -122,6 +122,9 @@ const cotizacionSchema=mongoose.Schema({
         destinos: {
           type: [String]
         }
+    },
+    nameFileCotizacionBucket:{
+        type:String
     }
 },
 { 
