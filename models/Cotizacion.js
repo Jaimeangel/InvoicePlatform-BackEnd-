@@ -101,12 +101,11 @@ const cotizacionSchema=mongoose.Schema({
     },
     condiciones:{
         titulo:{
-            type:String,
-            required: true,
+            type:String
+
         },
         text:{
-            type:String,
-            required: true,
+            type:String
         }
     },
     encabezado:{
