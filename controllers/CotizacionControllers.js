@@ -27,7 +27,7 @@ const agregarCotizacion = async (data)=>{
 const obtenerCotizaciones = async (req,res)=>{
     const {user}=req;
     try {
-        const cotizacionesByUsuario= await Cotizacion.find({creador:user._id})
+        const cotizacionesByUsuario= await Cotizacion.find({creador:user._id}).populate('cliente')
         return res.json({
             cotizaciones : cotizacionesByUsuario,
             lengthCotizaciones: Object.keys(cotizacionesByUsuario).length
