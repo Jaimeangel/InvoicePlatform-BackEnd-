@@ -1,6 +1,8 @@
 import emailTemplate from './emailTemplate.js';
-
 import nodemailer from 'nodemailer';
+
+import dotenv from "dotenv"
+dotenv.config()
 
 async function enviarEmailTemplate(data){
     const {
@@ -11,29 +13,36 @@ async function enviarEmailTemplate(data){
         file
     } = data;
 
+
     const USUARIO = usuario.toUpperCase()
     const REF = referencia.toUpperCase()
     const CLIENTE = cliente.toUpperCase()
 
     const transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
+        host: "smtp.office365.com", 
+        port: 587,
+        secure:false,
         auth: {
-          user: "1a9863939c9ab2",
-          pass: "c33aed3701e3ae"
+          user: process.env.USER_EMAIL,
+          pass: process.env.PASSWORD_EMAIL
         }
     });
 
-    const infoEmail = await transport.sendMail({
-        from:`${USUARIO} lacentraldeoveroles@hotmail.com`,
-        to:`${destinatario}`,
-        subject:`COTIZACION ${REF} ${USUARIO}`,
-        html:emailTemplate({cliente:CLIENTE, cotizacion:REF}),
-        attachments: [{
-            filename: `cotizacion-${REF}-${CLIENTE}-${USUARIO}.pdf`,
-            path : file
-        }]
-    })
+
+    try {
+        const infoEmail = await transport.sendMail({
+            from:`${USUARIO} Centraldeoveroles10@hotmail.com`,
+            to:`Centraldeoveroles10@hotmail.com`,
+            subject:`COTIZACION ${REF} ${USUARIO}`,
+            html:emailTemplate({cliente:CLIENTE, cotizacion:REF}),
+            attachments: [{
+                filename: `cotizacion-${REF}-${CLIENTE}-${USUARIO}.pdf`,
+                path : file
+            }]
+        }).then((e)=> console.log(exito,e))
+    } catch (error) {
+        console.log(error)
+    }
 
 }
 

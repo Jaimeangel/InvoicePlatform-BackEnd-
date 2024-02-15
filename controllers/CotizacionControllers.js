@@ -213,29 +213,47 @@ const enviarCotizacionMovil = async (req,res) => {
 }
 
 const enviarCotizacionEmail= async (req,res)=>{
+    const { user } = req;
+
     const {
-        cotizacion,
-        cliente 
+        ID
     } = req.body;
-    
-    const dataCotizacion = JSON.parse(cotizacion)
-    const dataCliente = JSON.parse(cliente)
+
+    const id = JSON.parse(ID)
+
+    let cotizacionByID;
+    let clienteByID;
+
+    try {
+        cotizacionByID = await Cotizacion.findById(id)
+    } catch (error) {
+        const errorMsg= new Error('No encontramos la cotizacion solicitada')
+        return res.status(503).json({msg:errorMsg.message})
+    }
+
+    try {
+        clienteByID = await Cliente.findById(cotizacionByID.cliente)   
+    } catch (error) {
+        const errorMsg= new Error('No encontramos el cliente solicitado')
+        return res.status(503).json({msg:errorMsg.message})
+    }
+
 
     const {
         nameUsuario,
         nameCliente
-    } = extraerInformacion(user,dataCliente)
+    } = extraerInformacion(user,clienteByID)
 
     try {
-        const imagenURL = await GetPdfURLBucketPrivate(nameFile)
+        const imagenURL = await GetPdfURLBucketPrivate(cotizacionByID.nameFileCotizacionBucket)
 
         try {
 
             await poolEnviarEmail({
                 usuario:nameUsuario,
                 cliente:nameCliente,
-                listaDestinario:dataCotizacion.email.destinos,
-                referencia:dataCotizacion.numeroCotizacion,
+                listaDestinario:cotizacionByID.email.destinos,
+                referencia:cotizacionByID.numeroCotizacion,
                 file:imagenURL
             })
 
