@@ -25,6 +25,11 @@ async function enviarEmailTemplate(data){
         auth: {
           user: process.env.USER_EMAIL,
           pass: process.env.PASSWORD_EMAIL
+        },
+        secureConnection: 'false',
+        tls: {
+            ciphers: 'SSLv3',
+            rejectUnauthorized: false
         }
     });
 
@@ -32,14 +37,14 @@ async function enviarEmailTemplate(data){
     try {
         const infoEmail = await transport.sendMail({
             from:`${USUARIO} Centraldeoveroles10@hotmail.com`,
-            to:`Centraldeoveroles10@hotmail.com`,
+            to:`${destinatario}`,
             subject:`COTIZACION ${REF} ${USUARIO}`,
             html:emailTemplate({cliente:CLIENTE, cotizacion:REF}),
             attachments: [{
                 filename: `cotizacion-${REF}-${CLIENTE}-${USUARIO}.pdf`,
                 path : file
             }]
-        }).then((e)=> console.log(exito,e))
+        })
     } catch (error) {
         console.log(error)
     }

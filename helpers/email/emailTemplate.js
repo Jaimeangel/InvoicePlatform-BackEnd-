@@ -95,7 +95,7 @@ function emailTemplate(data){
                         <td style="width: 100%; vertical-align: top; padding-left: 10px; padding-right: 10px; padding-top: 15px; padding-bottom: 15px;" width="100%">
             
                             <!-- Your logo is here -->
-                            <img style="max-width: 110px; text-align: center; color: #ffffff; display: block; margin: 0 auto;" alt="Logo" src="https://invoice-platform-images-public.s3.amazonaws.com/651a426e2d7da94d05b00ced-image-profile" align="center">
+                            <img style="width: 110px; text-align: center; color: #ffffff; display: block; margin: 0 auto;" alt="Logo" src="https://invoice-platform-images-public.s3.amazonaws.com/651a426e2d7da94d05b00ced-image-profile" align="center">
             
                             <h1 style="font-size: 20px; line-height: 24px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 600; text-decoration: none; color: #000000;">LA CENTRAL DE OVEROLES SAS ZOMAC</h1>
             
@@ -138,17 +138,17 @@ function emailTemplate(data){
                         <td style="width: 100%; vertical-align: top; padding-left: 10px; padding-right: 10px; padding-top: 15px; padding-bottom: 15px;" width="100%">
             
                             <!-- Your inverted logo is here -->
-                            <img style="max-width: 80px; text-align: center; color: #ffffff; display: block; margin: 0 auto;" alt="Logo" src="https://invoice-platform-images-public.s3.amazonaws.com/651a426e2d7da94d05b00ced-image-profile" align="center">
+                            <img style="width: 80px; text-align: center; color: #ffffff; display: block; margin: 0 auto;" alt="Logo" src="https://invoice-platform-images-public.s3.amazonaws.com/651a426e2d7da94d05b00ced-image-profile" align="center">
             
-                            <p style="font-size: 13px; line-height: 10px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 600; text-decoration: none; color: #ffffff;">
+                            <p style="margin-top: 10px; font-size: 13px; line-height: 10px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 600; text-decoration: none; color: #ffffff;">
                                 CALLE 10 # 11-44 BARRIO CENTRO
                             </p>
             
-                            <p style="margin-bottom: 0; font-size: 13px; line-height: 10px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 400; text-decoration: none; color: #ffffff;">
+                            <p style="margin-top: 10px; font-size: 13px; line-height: 10px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 400; text-decoration: none; color: #ffffff;">
                                 VILLANUEVA-CASANARE
                             </p>
             
-                            <p style="margin-bottom: 0; font-size: 13px; line-height: 10px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 400; text-decoration: none; color: #ffffff;">
+                            <p style="margin-top: 10px; font-size: 13px; line-height: 10px; font-family: 'Helvetica', Arial, sans-serif; font-weight: 400; text-decoration: none; color: #ffffff;">
                                 CELULAR: 310 349 96 63
                             </p>
             
