@@ -50,7 +50,43 @@ const obtenerCotizacionByID = async (req,res)=>{
             return res.status(401).json({msg:errorMsg.message})
         }
     
-        return res.json(cotizacionByID)
+        return res.json({
+            data:cotizacionByID
+        })
+    } catch (error) {
+        const errorMsg= new Error('No encontramos la cotizacion a la cual quiere acceder')
+        console.log(error)
+        return res.status(404).json({msg:errorMsg.message})
+    }
+}
+
+const obtenerURLCotizacionByID = async (req,res)=>{
+    const {cotizacion} = req.params;
+    const {user}=req;
+    if(!cotizacion){
+        const errorMsg= new Error('url incorrecta')
+        return res.status(401).json({msg:errorMsg.message})
+    }
+    try {
+        const cotizacionByID = await Cotizacion.findById(cotizacion)  
+
+        if(cotizacionByID.creador.toString() !== user._id.toString()){
+            const errorMsg= new Error('No tienes los permisos para acceder a la cotizacion')
+            return res.status(401).json({msg:errorMsg.message})
+        }
+
+        try {
+            const imagenURL = await GetPdfURLBucketPrivate(cotizacionByID.nameFileCotizacionBucket)
+            
+            return res.json({
+                url:imagenURL
+            })
+        } catch (error) {
+            const errorMsg= new Error('No encontramos el recurso que quiere acceder')
+            console.log(error)
+            return res.status(404).json({msg:errorMsg.message})
+        }
+    
     } catch (error) {
         const errorMsg= new Error('No encontramos la cotizacion a la cual quiere acceder')
         console.log(error)
@@ -276,5 +312,6 @@ export {
     eliminarCotizacion,
     guardarCotizacion,
     enviarCotizacionMovil,
-    enviarCotizacionEmail
+    enviarCotizacionEmail,
+    obtenerURLCotizacionByID
 }

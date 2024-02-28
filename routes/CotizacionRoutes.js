@@ -7,7 +7,8 @@ import {
     eliminarCotizacion,
     guardarCotizacion,
     enviarCotizacionMovil,
-    enviarCotizacionEmail
+    enviarCotizacionEmail,
+    obtenerURLCotizacionByID
 } from '../controllers/CotizacionControllers.js'
 
 import checkAuth from '../middlewares/checkAuth.js';
@@ -27,6 +28,10 @@ router
     .get(checkAuth,obtenerCotizacionByID)
     .put(checkAuth,editarCotizacion)
     .delete(checkAuth,eliminarCotizacion)
+
+router
+    .route('/getUrlPDF/:cotizacion')
+    .get(checkAuth,obtenerURLCotizacionByID)
 
 router.post('/guardar-cotizacion',checkAuth,guardarCotizacion)
 
