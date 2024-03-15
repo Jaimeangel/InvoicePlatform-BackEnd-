@@ -43,15 +43,17 @@ const obtenerCotizacionByID = async (req,res)=>{
     const {cotizacion} = req.params;
     const {user}=req;
     try {
-        const cotizacionByID = await Cotizacion.findById(cotizacion)  
+        const cotizacionByID = await Cotizacion.findById(cotizacion).populate('cliente')
 
         if(cotizacionByID.creador.toString() !== user._id.toString()){
             const errorMsg= new Error('No tienes los permisos para acceder a la cotizacion')
             return res.status(401).json({msg:errorMsg.message})
         }
-    
+        
+        console.log(cotizacionByID)
+
         return res.json({
-            data:cotizacionByID
+            cotizacionId:cotizacionByID
         })
     } catch (error) {
         const errorMsg= new Error('No encontramos la cotizacion a la cual quiere acceder')
