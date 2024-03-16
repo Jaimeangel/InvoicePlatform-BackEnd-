@@ -49,8 +49,6 @@ const obtenerCotizacionByID = async (req,res)=>{
             const errorMsg= new Error('No tienes los permisos para acceder a la cotizacion')
             return res.status(401).json({msg:errorMsg.message})
         }
-        
-        console.log(cotizacionByID)
 
         return res.json({
             cotizacionId:cotizacionByID
